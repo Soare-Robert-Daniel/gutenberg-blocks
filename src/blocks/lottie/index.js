@@ -9,6 +9,7 @@ const { registerBlockType } = wp.blocks;
  * Internal dependencies
  */
 import edit from './edit.js';
+import save from './save.js';
 import attributes from './attributes.js';
 
 registerBlockType( 'themeisle-blocks/lottie', {
@@ -22,5 +23,5 @@ registerBlockType( 'themeisle-blocks/lottie', {
 	],
 	attributes,
 	edit,
-	save: () => null
+	save
 });

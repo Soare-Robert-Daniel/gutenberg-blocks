@@ -39,7 +39,6 @@ const Inspector = ({
 	};
 
 	const setSpeed = ( value ) => {
-		console.log({ ...attributes });
 		setAttributes({ speed: Number( value ) });
 	};
 
@@ -158,7 +157,8 @@ const Inspector = ({
 								help={ __( 'Renderer to use.' ) }
 								options= { [
 									{ label: 'svg', value: 'svg' },
-									{ label: 'canvas', value: 'canvas' }
+									{ label: 'canvas', value: 'canvas' },
+									{ label: 'html', value: 'html' }
 								] }
 								value={ attributes.renderer }
 								onChange={ setRenderer }

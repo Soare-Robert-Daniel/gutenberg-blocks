@@ -4,7 +4,7 @@ const attributes = {
 	},
 	autoplay: {
 		type: 'boolean',
-		default: false
+		default: true
 	},
 	direction: {
 		type: 'number',
