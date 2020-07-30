@@ -1,4 +1,5 @@
 const { Fragment } = wp.element;
+import  '@lottiefiles/lottie-player';
 
 const Save = ({ attributes }) => {
 
@@ -6,6 +7,7 @@ const Save = ({ attributes }) => {
 		<Fragment>
 			<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 			<lottie-player
+				id={ attributes.id }
 				src={ attributes.src }
 				speed={ attributes.speed }
 				style={{ height: `${ attributes.height }px`, width: `${ attributes.width }px` }}

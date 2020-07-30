@@ -12,41 +12,76 @@ const { TextControl, Placeholder, Button } = wp.components;
 
 const { Fragment, useEffect, useRef, useState } = wp.element;
 
+const { uniqueId } = lodash;
+
 /**
  * Internal dependencies
  */
 import Inspector from './inspector.js';
 
-const LottiePlayer = ({ attributes, setAttributes }) => {
+const LottiePlayer = props => {
 
+	console.log( props );
+	const { attributes, setAttributes } = props;
 	const playerRef = useRef( null );
 	const [ src, setSrc ] = useState( attributes.src );
 
 	useEffect( () => {
+		setAttributes({ id: uniqueId( 'lottie_anim_' )});
+	}, []);
+
+	useEffect( () => {
 		if ( playerRef.current ) {
-
-			if ( attributes.loop ) {
-				playerRef.current.play();
-			} else {
-				playerRef.current.stop();
-			}
-
 			playerRef.current.setPlayerDirection( attributes.direction );
 			playerRef.current.setPlayerSpeed( attributes.speed );
 		}
-	});
+
+		if ( playerRef.current ) {
+			const { playerState } = playerRef.current.state;
+
+			if ( playerState ) {
+				if ( 'error' === playerState ) {
+					setAttributes({ src: '' });
+				}
+			}
+		}
+	}, [ attributes ]);
 
 	const setSrcToAttributes = ( ) => {
 		setAttributes({ src });
 	};
 
 	const eventHandeler = event => {
-		if ( 'loop' === event && attributes.loop ) {
-			playerRef.current.play();
+
+		if ( 'load' === event ) {
+			console.log( 'Loaded' );
+			playerRef.current.setPlayerDirection( attributes.direction );
+			playerRef.current.setPlayerSpeed( attributes.speed );
 		}
 
 		if ( 'error' === event ) {
 			console.log( 'Invalid source' );
+		}
+	};
+
+	const play = () => {
+		if ( playerRef.current ) {
+			console.log( 'Play' );
+			playerRef.current.play();
+		}
+	};
+
+	const pause = () => {
+		if ( playerRef.current ) {
+			console.log( 'Pause' );
+			playerRef.current.pause();
+		}
+	};
+
+	const stop = () => {
+		if ( playerRef.current ) {
+			console.log( 'Stop' );
+			playerRef.current.stop();
 		}
 	};
 
@@ -78,12 +113,16 @@ const LottiePlayer = ({ attributes, setAttributes }) => {
 			);
 		}
 
+		if ( playerRef.current ) {
+			console.log( playerRef.current );
+		}
+
 		return (
 			<Player
 				ref= { playerRef }
 				src={ attributes.src }
 				onBackgroundChange={ value => console.log( value ) }
-				style={{ height: `${ attributes.height }px`, width: `${ attributes.width }px`, background: attributes.background }}
+				style={{ height: `${ attributes.height }px`, width: `${ attributes.width }px` }}
 				background={ attributes.background }
 				loop={ attributes.loop }
 				hover={ attributes.hover }
@@ -93,18 +132,22 @@ const LottiePlayer = ({ attributes, setAttributes }) => {
 				renderer={ attributes.renderer }
 				onEvent={ eventHandeler }
 			>
-				<Controls
-					visible={ attributes.controls }
-					loop={ true }
-					buttons={[ 'play', 'repeat', 'debug' ]} />
+				<Controls visible={ true } buttons={[ 'play', 'frame', 'debug' ]} />
 			</Player>
 		);
 	};
 
 	return (
 		<Fragment>
-			<Inspector attributes={ attributes } setAttributes={ setAttributes } setSrc= { setSrc }/>
+			<Inspector
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+				setSrc= { setSrc }
+				actions={{ play, pause, stop }}
+				playerRef={ playerRef }
+			/>
 			{ renderPlayer() }
+
 		</Fragment>
 	);
 };

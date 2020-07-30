@@ -13,7 +13,7 @@ import save from './save.js';
 import attributes from './attributes.js';
 
 registerBlockType( 'themeisle-blocks/lottie', {
-	title: __( 'Lottie' ),
+	title: __( 'Lottie - Experimental' ),
 	description: __( 'Embed Lottie content' ),
 	category: 'themeisle-blocks',
 	keywords: [

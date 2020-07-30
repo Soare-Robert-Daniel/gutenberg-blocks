@@ -1,4 +1,7 @@
 const attributes = {
+	id: {
+		type: 'string'
+	},
 	src: {
 		type: 'string'
 	},
@@ -24,10 +27,11 @@ const attributes = {
 	},
 	controls: {
 		type: 'boolean',
-		default: true
+		default: false
 	},
 	background: {
-		type: 'string'
+		type: 'string',
+		default: '#ffffff'
 	},
 	hover: {
 		type: 'boolean',

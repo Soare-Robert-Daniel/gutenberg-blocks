@@ -11,26 +11,32 @@ const {
 	RangeControl,
 	SelectControl,
 	ToggleControl,
-	ColorPicker
+	ColorPicker,
+	Button,
+	ButtonGroup
 } = wp.components;
 
-const { Fragment } = wp.element;
+const { Fragment, useState } = wp.element;
 
 const Inspector = ({
 	attributes,
 	setAttributes,
-	setSrc
+	actions,
+	playerRef
 }) => {
+
+	const [ enableBackground, setEnableBackground ] = useState( ! '#ffffff' !== attributes.background );
 
 	const setAutoplay = ( value ) => {
 		setAttributes({ autoplay: value });
 	};
 
-	const setDirection = ( value ) => {
-		setAttributes({ direction: Number( value ) });
-	};
-
 	const setLoop = ( value ) => {
+
+		const { instance } = playerRef.current.state;
+		instance.loop = value;
+		playerRef.current.setState({ instance: instance });
+
 		setAttributes({ loop: value });
 	};
 
@@ -47,7 +53,15 @@ const Inspector = ({
 	};
 
 	const setBackground = ( value ) => {
+		playerRef.current.setState({ background: value.hex });
+
 		setAttributes({ background: value.hex });
+	};
+
+	const resetBackground = () => {
+		playerRef.current.setState({ background: '#ffffff' });
+
+		setAttributes({ background: '#ffffff' });
 	};
 
 	const setHover = ( value ) => {
@@ -62,7 +76,6 @@ const Inspector = ({
 		setAttributes({ width: value });
 	};
 
-
 	return (
 		<InspectorControls>
 			<PanelBody
@@ -75,15 +88,39 @@ const Inspector = ({
 					help={ __( 'Ex: https://assets1.lottiefiles.com/datafiles/jEgAWaDrrm6qdJx/data.json' ) }
 					type='text'
 					value={ attributes.src }
-					onChange={ setSrc }
+					onChange={ value => setAttributes({ src: value }) }
 				/>
 
 				{
 					attributes.src && (
 						<Fragment>
+
+							<ButtonGroup>
+								<Button
+									isPrimary
+									onClick={ actions.play }
+								>
+								Play
+								</Button>
+
+								<Button
+									isPrimary
+									onClick={ actions.pause }
+								>
+								Pause
+								</Button>
+
+								<Button
+									isPrimary
+									onClick={ actions.stop }
+								>
+								Stop
+								</Button>
+							</ButtonGroup>
+
 							<ToggleControl
 								label={ __( 'Autoplay' ) }
-								help={ __( 'Set the animation to play automaticaly.' ) }
+								help={ __( 'Set the animation to play automaticaly after loading.' ) }
 								checked={ attributes.autoplay }
 								onChange={ setAutoplay }
 							/>
@@ -113,15 +150,34 @@ const Inspector = ({
 								max={ 800 }
 							/>
 
-							<ColorPicker
-								color={ attributes.background }
-								onChangeComplete={ setBackground }
-								disableAlpha
+							<ToggleControl
+								label={ __( 'Custom Background' ) }
+								help={ __( 'Set a custom background color.' ) }
+								checked={ enableBackground }
+								onChange={ setEnableBackground }
 							/>
+
+							{ enableBackground && (
+								<Fragment>
+									<Button
+										onClick={ resetBackground }
+										isTertiary
+										isDestructive
+									>
+										Reset
+									</Button>
+
+									<ColorPicker
+										color={ attributes.background }
+										onChangeComplete={ setBackground }
+										disableAlpha
+									/>
+								</Fragment>
+							)}
 
 							<ToggleControl
 								label={ __( 'Controls' ) }
-								help={ __( 'Show controls.' ) }
+								help={ __( 'Show controls ( play, stop, ...) to user.' ) }
 								checked={ attributes.controls }
 								onChange={ setControls }
 							/>
@@ -139,17 +195,6 @@ const Inspector = ({
 								type='number'
 								value={ attributes.speed }
 								onChange={ setSpeed }
-							/>
-
-							<SelectControl
-								label= { __( 'Direction' ) }
-								help={ __( 'Direction of animation.' ) }
-								options= { [
-									{ label: 'Forward', value: 1 },
-									{ label: 'Backward', value: -1 }
-								] }
-								value={ attributes.direction }
-								onChange={ setDirection }
 							/>
 
 							<SelectControl

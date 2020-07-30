@@ -14,6 +14,7 @@
 	},
 	"dependencies": {
 		"@emotion/core": "^10.0.28",
+		"@lottiefiles/lottie-player": "^0.5.1",
 		"@lottiefiles/react-lottie-player": "^2.1.5",
 		"@wordpress/icons": "^2.4.0",
 		"array-move": "^3.0.0",
