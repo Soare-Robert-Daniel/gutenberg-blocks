@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 const { __ } = wp.i18n;
@@ -22,7 +27,8 @@ const Inspector = ({
 	attributes,
 	setAttributes,
 	actions,
-	playerRef
+	playerRef,
+	error
 }) => {
 
 	const [ enableBackground, setEnableBackground ] = useState( ! '#ffffff' !== attributes.background );
@@ -84,6 +90,7 @@ const Inspector = ({
 			>
 
 				<TextControl
+					className={ classnames( 'wp-block-themeisle-inspector-src', { 'error': error })}
 					label= { __( 'Lottie Animation URL ' ) }
 					help={ __( 'Ex: https://assets1.lottiefiles.com/datafiles/jEgAWaDrrm6qdJx/data.json' ) }
 					type='text'
@@ -160,6 +167,7 @@ const Inspector = ({
 							{ enableBackground && (
 								<Fragment>
 									<Button
+										className="wp-block-themeisle-inspector-background"
 										onClick={ resetBackground }
 										isTertiary
 										isDestructive
@@ -202,7 +210,6 @@ const Inspector = ({
 								help={ __( 'Renderer to use.' ) }
 								options= { [
 									{ label: 'svg', value: 'svg' },
-									{ label: 'canvas', value: 'canvas' },
 									{ label: 'html', value: 'html' }
 								] }
 								value={ attributes.renderer }
