@@ -3,6 +3,7 @@
  */
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 import classnames from 'classnames';
+import { pencil, Icon } from '@wordpress/icons';
 
 /**
  * Wordpress dependencies
@@ -13,7 +14,9 @@ const {
 	TextControl,
 	Placeholder,
 	Button,
-	Notice
+	Notice,
+	ToolbarGroup,
+	ToolbarButton
 } = wp.components;
 
 const {
@@ -25,6 +28,8 @@ const {
 
 const { uniqueId } = lodash;
 
+const { BlockControls } = wp.blockEditor;
+
 /**
  * Internal dependencies
  */
@@ -35,6 +40,7 @@ const LottiePlayer = props => {
 	const { attributes, setAttributes } = props;
 	const playerRef = useRef( null );
 	const [ src, setSrc ] = useState( attributes.src );
+	const [ showEdit, setShowEdit ] = useState( ! attributes.src );
 	const [ error, setError ] = useState( false );
 
 	useEffect( () => {
@@ -58,8 +64,21 @@ const LottiePlayer = props => {
 		}
 	}, [ attributes ]);
 
+	const validateURL = url => {
+		const expression = /(http(s)?:\/\/.){1}(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)([-a-zA-Z0-9_]\.json)/;
+		const regex = new RegExp( expression );
+
+		return url.match( regex );
+	};
+
 	const setSrcToAttributes = ( ) => {
-		setAttributes({ src });
+
+		if ( validateURL( src ) ) {
+			setAttributes({ src });
+			setShowEdit( false );
+		} else {
+			setError( true );
+		}
 	};
 
 	const eventHandeler = event => {
@@ -91,7 +110,7 @@ const LottiePlayer = props => {
 
 	const renderPlayer = () => {
 
-		if ( ! attributes.src ) {
+		if ( ! attributes.src || showEdit ) {
 			return (
 				<Placeholder
 					label={ 'Lottie Animation URL' }
@@ -102,8 +121,8 @@ const LottiePlayer = props => {
 				>
 					<TextControl
 						className={ classnames( 'wp-block-themeisle-block-src', { 'error': error })}
-						help={ __( 'Ex: https://assets1.lottiefiles.com/datafiles/jEgAWaDrrm6qdJx/data.json' ) }
-						type='text'
+						help={ __( 'The URl must return a valid Lottie file. Ex: https://assets1.lottiefiles.com/datafiles/jEgAWaDrrm6qdJx/data.json' ) }
+						type='url'
 						value={ src }
 						onChange={ setSrc }
 					/>
@@ -147,6 +166,19 @@ const LottiePlayer = props => {
 				playerRef={ playerRef }
 				error={ error }
 			/>
+
+			<BlockControls>
+				<ToolbarGroup>
+					{ ! showEdit && (
+						<ToolbarButton
+							label={ __( 'Edit URL' ) }
+							icon={ <Icon icon={ pencil } /> }
+							onClick={ setShowEdit }
+						/>
+					)}
+				</ToolbarGroup>
+			</BlockControls>
+
 			{ error && (
 				<Notice
 					isDismissible
