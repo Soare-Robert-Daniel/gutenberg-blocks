@@ -8,7 +8,7 @@ import classnames from 'classnames';
  */
 const { __ } = wp.i18n;
 
-const { InspectorControls } = wp.blockEditor;
+const { InspectorControls, ColorPalette } = wp.blockEditor;
 
 const {
 	PanelBody,
@@ -16,12 +16,13 @@ const {
 	RangeControl,
 	SelectControl,
 	ToggleControl,
-	ColorPicker,
 	Button,
 	ButtonGroup
 } = wp.components;
 
 const { Fragment, useState } = wp.element;
+
+import ColorBaseControl from './../../components/color-base-control/index.js';
 
 const Inspector = ({
 	attributes,
@@ -58,16 +59,10 @@ const Inspector = ({
 		setAttributes({ controls: value });
 	};
 
-	const setBackground = ( value ) => {
-		playerRef.current.setState({ background: value.hex });
+	const setBackgroundColor = ( value ) => {
+		playerRef.current.setState({ background: value });
 
-		setAttributes({ background: value.hex });
-	};
-
-	const resetBackground = () => {
-		playerRef.current.setState({ background: '#ffffff' });
-
-		setAttributes({ background: '#ffffff' });
+		setAttributes({ backgroundColor: value });
 	};
 
 	const setHover = ( value ) => {
@@ -166,20 +161,16 @@ const Inspector = ({
 
 							{ enableBackground && (
 								<Fragment>
-									<Button
-										className="wp-block-themeisle-inspector-background"
-										onClick={ resetBackground }
-										isTertiary
-										isDestructive
+									<ColorBaseControl
+										label={ __( 'Background Color' ) }
+										colorValue={ attributes.backgroundColor }
 									>
-										Reset
-									</Button>
-
-									<ColorPicker
-										color={ attributes.background }
-										onChangeComplete={ setBackground }
-										disableAlpha
-									/>
+										<ColorPalette
+											label={ 'Background Color' }
+											value={ attributes.background }
+											onChange={ setBackgroundColor }
+										/>
+									</ColorBaseControl>
 								</Fragment>
 							)}
 

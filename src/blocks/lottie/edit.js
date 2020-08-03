@@ -123,7 +123,7 @@ const LottiePlayer = props => {
 				ref= { playerRef }
 				src={ attributes.src }
 				style={{ height: `${ attributes.height }px`, width: `${ attributes.width }px` }}
-				background={ attributes.background }
+				background={ attributes.backgroundColor }
 				loop={ attributes.loop }
 				hover={ attributes.hover }
 				direction={ attributes.direction }

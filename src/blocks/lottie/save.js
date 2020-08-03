@@ -11,7 +11,7 @@ const Save = ({ attributes }) => {
 				src={ attributes.src }
 				speed={ attributes.speed }
 				style={{ height: `${ attributes.height }px`, width: `${ attributes.width }px` }}
-				background={ attributes.background }
+				background={ attributes.backgroundColor }
 				loop={ attributes.loop }
 				hover={ attributes.hover }
 				direction={ attributes.direction }

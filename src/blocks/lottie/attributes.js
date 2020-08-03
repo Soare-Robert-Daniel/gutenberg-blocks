@@ -29,7 +29,7 @@ const attributes = {
 		type: 'boolean',
 		default: false
 	},
-	background: {
+	backgroundColor: {
 		type: 'string',
 		default: '#ffffff'
 	},
