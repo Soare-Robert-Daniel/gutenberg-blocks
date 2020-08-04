@@ -13,9 +13,17 @@ const attributes = {
 		type: 'number',
 		default: 1
 	},
+	loopType: {
+		type: 'string',
+		default: 'none'
+	},
 	loop: {
 		type: 'boolean',
 		default: false
+	},
+	loopCount: {
+		type: 'number',
+		default: 0
 	},
 	renderer: {
 		type: 'string',

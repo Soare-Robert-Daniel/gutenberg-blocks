@@ -11,67 +11,67 @@ const { InspectorControls, ColorPalette } = wp.blockEditor;
 
 const {
 	PanelBody,
-	TextControl,
 	RangeControl,
 	SelectControl,
-	ToggleControl,
-	Button,
-	ButtonGroup
+	ToggleControl
 } = wp.components;
 
 const { Fragment, useState } = wp.element;
 
 import ColorBaseControl from './../../components/color-base-control/index.js';
+import { LOOP_OPTIONS } from './constants.js';
 
 const Inspector = ({
 	attributes,
 	setAttributes,
-	actions,
 	playerRef
 }) => {
 
 	const [ enableBackground, setEnableBackground ] = useState( ! '#ffffff' !== attributes.background );
 
-	const setAutoplay = ( value ) => {
+
+	const setAutoplay = value => {
 		setAttributes({ autoplay: value });
 	};
 
-	const setLoop = ( value ) => {
-
-		const { instance } = playerRef.current.state;
-		instance.loop = value;
-		playerRef.current.setState({ instance: instance });
-
-		setAttributes({ loop: value });
+	const setLoopType = loopType => {
+		setAttributes({
+			loopType: loopType,
+			loop: loopType === LOOP_OPTIONS.CONTINUOUS
+		});
 	};
 
-	const setRenderer = ( value ) => {
+	const setLoopCount = value => {
+		setAttributes({ loopCount: value });
+	};
+
+	const setRenderer = value => {
 		setAttributes({ renderer: value });
 	};
 
-	const setSpeed = ( value ) => {
+	const setSpeed = value => {
 		setAttributes({ speed: Number( value ) });
 	};
 
-	const setControls = ( value ) => {
+	const setControls = value => {
 		setAttributes({ controls: value });
 	};
 
-	const setBackgroundColor = ( value ) => {
+	const setBackgroundColor = value => {
 		playerRef.current.setState({ background: value });
 
 		setAttributes({ backgroundColor: value });
 	};
 
-	const setHover = ( value ) => {
+	const setHover = value => {
 		setAttributes({ hover: value });
 	};
 
-	const setHeight = ( value ) => {
+	const setHeight = value => {
 		setAttributes({ height: value });
 	};
 
-	const setWidth = ( value ) => {
+	const setWidth = value => {
 		setAttributes({ width: value });
 	};
 
@@ -95,29 +95,6 @@ const Inspector = ({
 					attributes.src && (
 						<Fragment>
 
-							<ButtonGroup>
-								<Button
-									isPrimary
-									onClick={ actions.play }
-								>
-								Play
-								</Button>
-
-								<Button
-									isPrimary
-									onClick={ actions.pause }
-								>
-								Pause
-								</Button>
-
-								<Button
-									isPrimary
-									onClick={ actions.stop }
-								>
-								Stop
-								</Button>
-							</ButtonGroup>
-
 							<ToggleControl
 								label={ __( 'Autoplay' ) }
 								help={ __( 'Set the animation to play automaticaly after loading.' ) }
@@ -125,12 +102,38 @@ const Inspector = ({
 								onChange={ setAutoplay }
 							/>
 
-							<ToggleControl
-								label={ __( 'Loop' ) }
-								help={ __( 'Whether to loop animation.' ) }
-								checked={ attributes.loop }
-								onChange={ setLoop }
+							<RangeControl
+								label={ __( 'Speed' ) }
+								help={ __( 'Animation speed.' ) }
+								value={ attributes.speed }
+								onChange={ setSpeed }
+								min={ 1 }
+								max={ 10 }
 							/>
+
+							<SelectControl
+								label= { __( 'Loop Type' ) }
+								help={ __( 'Whether to loop animation.' ) }
+								options= { [
+									{ label: LOOP_OPTIONS.NONE, value: LOOP_OPTIONS.NONE },
+									{ label: LOOP_OPTIONS.CONTINUOUS, value: LOOP_OPTIONS.CONTINUOUS },
+									{ label: LOOP_OPTIONS.COUNTED, value: LOOP_OPTIONS.COUNTED }
+								] }
+								value={ attributes.loopType }
+								onChange={ setLoopType }
+							/>
+
+							{
+								attributes.loopType === LOOP_OPTIONS.COUNTED && (
+									<RangeControl
+										label={ __( 'Numbers of loops' ) }
+										value={ attributes.loopCount }
+										onChange={ setLoopCount }
+										min={ 0 }
+										max={ 10 }
+									/>
+								)
+							}
 
 							<RangeControl
 								label={ __( 'Height' ) }
@@ -184,14 +187,6 @@ const Inspector = ({
 								help={ __( 'Whether to play on mouse hover.' ) }
 								checked={ attributes.hover}
 								onChange={ setHover }
-							/>
-
-							<TextControl
-								label= { __( 'Speed' ) }
-								help={ __( 'Animation speed.' ) }
-								type='number'
-								value={ attributes.speed }
-								onChange={ setSpeed }
 							/>
 
 							<SelectControl
