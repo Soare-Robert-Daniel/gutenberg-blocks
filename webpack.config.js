@@ -11,7 +11,7 @@ module.exports = {
 		blocks: [
 			'./src/index.js',
 			'./src/plugins/registerPlugin.js',
-			...glob.sync( './src/blocks/**/index.js' )
+			...glob.sync( './src/blocks/**/index.@(js|ts|tsx)' )
 		],
 		maps: [
 			...glob.sync( './src/frontend/google-map/index.js' )
@@ -30,8 +30,9 @@ module.exports = {
 		]
 	},
 	externals: {
-		'react': 'React',
-		'react-dom': 'ReactDOM',
+
+		// 'react': 'React',
+		// 'react-dom': 'ReactDOM',
 		'lodash': 'lodash'
 	},
 	output: {
@@ -43,17 +44,26 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /.js?$/,
+				test: /\.(ts|js)x?$/,
+				exclude: /node_modules/,
 				use: [ {
 					loader: 'babel-loader',
 					options: {
+
 						presets: [
 							'@babel/preset-env',
-							'@emotion/babel-preset-css-prop'
+							'@emotion/babel-preset-css-prop',
+							'@babel/preset-typescript'
+
+							// [ '@babel/preset-typescript', {
+							// 	isTSX: true,
+							// 	allExtensions: true
+							// } ]
 						],
 						plugins: [
 							'@babel/plugin-transform-async-to-generator',
 							'@babel/plugin-proposal-object-rest-spread',
+							'@babel/plugin-proposal-class-properties',
 							'@babel/plugin-syntax-dynamic-import',
 							[
 								'@babel/plugin-transform-react-jsx', {
@@ -63,8 +73,7 @@ module.exports = {
 							]
 						]
 					}
-				},
-				'eslint-loader' ]
+				} ]
 			},
 			{
 				test: /\.(css|scss)$/,
@@ -113,5 +122,8 @@ module.exports = {
 			chunkFilename: 'editor.css'
 		}),
 		new CleanWebpackPlugin()
-	]
+	],
+	resolve: {
+		extensions: [ '.ts', '.tsx', '.js', '.json' ]
+	}
 };

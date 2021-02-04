@@ -4,8 +4,14 @@
         "es6": true
     },
     "extends": "wordpress",
-    "parser": "babel-eslint",
+    "overrides": [
+        {
+            "files": ["./src/**/*.js"],
+            "parser": "@babel/eslint-parser"
+        }
+    ],
     "parserOptions": {
+        "requireConfigFile": false,
         "allowImportExportEverywhere": true,
         "ecmaFeatures": {
             "jsx": true
@@ -14,7 +20,8 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "@babel"
     ],
     "rules": {
         "indent": [
