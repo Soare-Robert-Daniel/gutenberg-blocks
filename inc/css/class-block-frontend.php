@@ -226,7 +226,6 @@ class Block_Frontend extends Base_CSS {
 			return;
 		}
 
-
 		if ( $footer ) {
 			$location = 'wp_footer';
 		}
@@ -271,7 +270,7 @@ class Block_Frontend extends Base_CSS {
 			add_action(
 				'wp_footer',
 				function () use ( $post_id, $file_name, $file_url ) {
-					return wp_enqueue_style( 'themeisle-gutenberg-' . $file_name, $file_url, array( 'themeisle-block_styles' ), get_the_modified_time( 'U', $post_id ) );
+					return wp_enqueue_style( 'themeisle-gutenberg-' . $file_name, $file_url, array( 'themeisle-block_styles' ), THEMEISLE_BLOCKS_VERSION );
 				}
 			);
 
@@ -281,7 +280,7 @@ class Block_Frontend extends Base_CSS {
 		add_action(
 			'wp_enqueue_scripts',
 			function () use ( $post_id, $file_name, $file_url ) {
-				return wp_enqueue_style( 'themeisle-gutenberg-' . $file_name, $file_url, array( 'themeisle-block_styles' ), get_the_modified_time( 'U', $post_id ) );
+				return wp_enqueue_style( 'themeisle-gutenberg-' . $file_name, $file_url, array( 'themeisle-block_styles' ), THEMEISLE_BLOCKS_VERSION );
 			}
 		);
 	}

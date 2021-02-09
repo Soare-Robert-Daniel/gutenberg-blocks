@@ -18,6 +18,15 @@ module.exports = {
 		],
 		slider: [
 			...glob.sync( './src/frontend/slider/index.js' )
+		],
+		'progress-bar': [
+			...glob.sync( './src/frontend/progress-bar/index.js' )
+		],
+		'circle-counter': [
+			...glob.sync( './src/frontend/circle-counter/index.js' )
+		],
+		lottie: [
+			...glob.sync( './src/frontend/lottie/index.js' )
 		]
 	},
 	externals: {
@@ -66,9 +75,11 @@ module.exports = {
 				{
 					loader: 'postcss-loader',
 					options: {
-						plugins: [
-							require( 'autoprefixer' )
-						]
+						postcssOptions: {
+							plugins: [
+								require( 'autoprefixer' )
+							]
+						}
 					}
 				},
 				'sass-loader' ]

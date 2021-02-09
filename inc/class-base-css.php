@@ -72,6 +72,10 @@ class Base_CSS {
 			'\ThemeIsle\GutenbergBlocks\CSS\Blocks\Button_Group_CSS',
 			'\ThemeIsle\GutenbergBlocks\CSS\Blocks\Button_CSS',
 			'\ThemeIsle\GutenbergBlocks\CSS\Blocks\Font_Awesome_Icons_CSS',
+			'\ThemeIsle\GutenbergBlocks\CSS\Blocks\Progress_Bar_CSS',
+			'\ThemeIsle\GutenbergBlocks\CSS\Blocks\Icon_List_CSS',
+			'\ThemeIsle\GutenbergBlocks\CSS\Blocks\Icon_List_Item_CSS',
+			'\ThemeIsle\GutenbergBlocks\CSS\Blocks\Circle_Counter_CSS',
 		);
 	}
 
